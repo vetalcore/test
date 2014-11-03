@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+	<head>
+		<title>Messages</title>
+		<meta charset="UTF-8"/>
+		<script src="vendor/angular/angular.min.js"></script>
+		<script src="vendor/angular-dragdrop-master/draganddrop.js"></script>
+		<script src="vendor/controllers/controller.js"></script>
+		<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<script src="vendor/jquery/jquery.min.js"></script>
+		<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+		<style>
+			section { float: left; width: 80%; border: 1px solid; margin: 10px 0px 10px 0px; }
+			section > span { float: left; height: 100px; display: block; width: 30px; border: 1px solid; margin: 15px; }
+			section > div { float: left; border: 1px solid; width: 94%; margin: 15px; height: 100px; } 
+			section > div > .status { float: left; border: 1px solid; margin: 5px 12px 2px 8px; width: 60px; }
+			section > div > .title { float: left; border: 1px solid; margin: 5px 12px 2px 8px; width: 10%; overflow: hidden; /* word-wrap: normal; */ text-overflow: ellipsis; }
+			section > div > .author { border: 1px solid; margin: 5px 12px 2px 8px; width: 80%; float: right; } 
+			section > div > img { float: left; border: 1px solid; margin: 5px 12px 2px 8px; width: 60px; height: 60px; }
+			section > div > .content { float: left; display: block; border: 1px solid; margin: 5px 4px 2px 8px; width: 93%; height: 59px; } 
+		</style>
+	</head>
+	<body ng-controller="MainCtrl as main">
+		<ul class="nav nav-tabs">
+		  	<li><a href="#New" data-toggle="tab" ui-on-Drop="main.onDrop($event,$index,$data)" drop-channel="Open, Closed">New</a></li>
+		  	<li><a href="#Open" data-toggle="tab" ui-on-Drop="main.onDrop($event,$index,$data)" drop-channel="New, Closed">Open</a></li>
+		  	<li><a href="#Pending" data-toggle="tab" ui-on-Drop="main.onDrop($event,$index,$data)" drop-channel="Closed">Pending</a></li>
+		  	<li><a href="#Closed" data-toggle="tab" ui-on-Drop="main.onDrop($event,$index,$data)" drop-channel="New, Open, Pending">Closed</a></li>
+		</ul>
+		<div class="tab-content">
+		  	<div class="tab-pane active" id="New">
+		  		<section ng-repeat="message in main.Messages | filter: { status: 'New' }" ui-on-Drop="main.onDropMessage($event,$index,$data)" drop-channel="New"> 
+		  			<span ui-draggable="true" drag={{message.id}} drag-channel="New" >{{message.id}}</span>
+		  			<div>
+		  				<span class="status">{{message.status}}</span>
+		  				<span class="title">{{message.title}}</span>
+		  				<span class="author">{{message.author}}</span>
+		  				<img alt='picture'></img>				
+		  				<span class="content">{{message.content}}</span>
+		  			</div>
+		  		</section>
+		  	</div>
+		  	<div class="tab-pane" id="Open">
+		  		<section ng-repeat="message in main.Messages | filter: { status: 'Open' }" ui-on-Drop="main.onDropMessage($event,$index,$data)" drop-channel="Open"> 
+		  			<span ui-draggable="true" drag={{message.id}} drag-channel="Open" >{{message.id}}</span>
+		  			<div>
+		  				<span class="status">{{message.status}}</span>
+		  				<span class="title">No Title Here</span>
+		  				<span class="author">{{message.author}}</span>
+		  				<img src="{{message.img_src}}"></img>				
+		  				<span class="content">{{message.content}}</span>
+		  			</div>
+		  		</section>
+		  	</div>
+		  	<div class="tab-pane" id="Pending">
+		  		<section ng-repeat="message in main.Messages | filter: { status: 'Pending' }" ui-on-Drop="main.onDropMessage($event,$index,$data)" drop-channel="Pending"> 
+		  			<span ui-draggable="true" drag="{{message.id}}" drag-channel="Pending" >{{message.id}}</span>
+		  			<div>
+		  				<span class="status">{{message.status}}</span>
+		  				<span class="title">{{message.title}}</span>
+		  				<span class="author">{{message.author}}</span>
+		  				<img src="{{message.img_src}}"></img>				
+		  				<span class="content">No Content Here</span>
+		  			</div>
+		  		</section>
+		  	</div>
+		  	<div class="tab-pane" id="Closed" >
+		  		<section ng-repeat="message in main.Messages | filter: { status: 'Closed' }" ui-on-Drop="main.onDropMessage($event,$index,$data)" drop-channel="Closed"> 
+		  			<span ui-draggable="true" drag="{{message.id}}" drag-channel="Closed" >{{message.id}}</span>
+		  			<div>
+		  				<span class="status">{{message.status}}</span>
+		  				<span class="title">{{message.title}}</span>
+		  				<span class="author">No Author Here</span>
+		  				<img src="{{message.img_src}}"></img>				
+		  				<span class="content">{{message.content}}</span>
+		  			</div>
+		  		</section>
+		  	</div>
+		</div>
+	</body>
+</html>
